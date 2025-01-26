@@ -14,6 +14,7 @@ const taskSchema = new mongoose.Schema({
         required: [true, "content is required!"],
     },
     status: {
+        type: String,
         enum: ["pending", "completed"],
         default: "pending",
     },

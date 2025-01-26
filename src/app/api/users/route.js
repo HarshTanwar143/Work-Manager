@@ -1,10 +1,12 @@
 import { User } from "@/models/user";
 import { dbConnect } from "@/helper/dbConnect";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
+// database connection
 dbConnect();
 
-// creating a new user
+// creating a new user (Signup)
 export async function POST(request) {
     const {name, email, password, about, profileUrl} = await request.json();
     const user = new User({
@@ -15,6 +17,8 @@ export async function POST(request) {
         profileUrl
     });
     try{
+        // hashSync is synchronous function thereforn we don't need to use await. but in hash we need to use await
+        user.password = bcrypt.hashSync(user.password, parseInt(process.env.BCRYPT_SALT));
         const createdUser = await user.save();
         return NextResponse.json(user,{
             message: "User created successfully",
@@ -23,8 +27,17 @@ export async function POST(request) {
             success: true
         });
     }catch(err){
-        return generateResponse("Failed to create user", 500, false);
-    }
+        // console.log("error is : ", err);
+        return NextResponse.json(
+                {
+                message: "failed to create user !!",
+                status: false,
+                },
+                {
+                status: 500,
+                }
+            );    
+        }
 }
 
 // getting all users
