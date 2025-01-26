@@ -36,9 +36,6 @@ export async function POST(request){
             httpOnly: true
         });
 
-        console.log("token :: ", token);
-        console.log("user :: ", user);
-
         return response;
 
     }catch(err){
