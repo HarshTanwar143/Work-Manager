@@ -56,9 +56,7 @@ export async function GET() {
         return NextResponse.json({
             message: "Failed to get users",
             success: false
-        },{
-            success: false
-        })
+        });
     }
 }
 
